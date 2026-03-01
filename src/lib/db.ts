@@ -24,6 +24,13 @@ const REQUIRED_USERS: User[] = [
     is_active: true,
   },
   {
+    id: 'user_004',
+    name: 'Mahesh P',
+    phone_number: '8310328856',
+    role: 'admin',
+    is_active: true,
+  },
+  {
     id: 'user_003',
     name: 'shashikala enterprizes',
     phone_number: '9742117420',
