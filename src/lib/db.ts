@@ -39,18 +39,37 @@ const REQUIRED_USERS: User[] = [
   },
 ];
 
+const DEFAULT_PRODUCT: Product = {
+  id: 'prod_001',
+  name: 'Kamadhenu Milk Junnu Powder - 100g x 120pc = 1 bag',
+  stock: 100,
+  description: 'Traditional South Indian Colostrum Milk Dessert. No Preservatives. High in Protein & Calcium.',
+  image_url: '/product-image.png',
+};
+
 // Initialize Database with default data
 export const initializeDB = () => {
-  // Initialize Product if not exists
-  if (!localStorage.getItem(DB_KEYS.PRODUCT)) {
-    const defaultProduct: Product = {
-      id: 'prod_001',
-      name: 'Kamadhenu Milk Junnu Powder – 100g x 120pc = 1 bag',
-      stock: 100,
-      description: 'Traditional South Indian Colostrum Milk Dessert. No Preservatives. High in Protein & Calcium.',
-      image_url: '/product-image.jpg',
+  const productData = localStorage.getItem(DB_KEYS.PRODUCT);
+  if (!productData) {
+    localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(DEFAULT_PRODUCT));
+  } else {
+    const product: Product = JSON.parse(productData);
+    const normalizedProduct: Product = {
+      ...product,
+      id: DEFAULT_PRODUCT.id,
+      name: DEFAULT_PRODUCT.name,
+      description: DEFAULT_PRODUCT.description,
+      image_url: DEFAULT_PRODUCT.image_url,
     };
-    localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(defaultProduct));
+
+    if (
+      product.id !== normalizedProduct.id ||
+      product.name !== normalizedProduct.name ||
+      product.description !== normalizedProduct.description ||
+      product.image_url !== normalizedProduct.image_url
+    ) {
+      localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(normalizedProduct));
+    }
   }
 
   // Ensure required users exist with requested roles.
@@ -108,7 +127,7 @@ export const getUsers = (): User[] => {
 
 export const getUserByPhone = (phone: string): User | null => {
   const users = getUsers();
-  return users.find(u => u.phone_number === phone) || null;
+  return users.find((u) => u.phone_number === phone) || null;
 };
 
 export const addUser = (user: Omit<User, 'id'>): User => {
@@ -124,9 +143,9 @@ export const addUser = (user: Omit<User, 'id'>): User => {
 
 export const updateUser = (id: string, updates: Partial<User>): User | null => {
   const users = getUsers();
-  const index = users.findIndex(u => u.id === id);
+  const index = users.findIndex((u) => u.id === id);
   if (index === -1) return null;
-  
+
   users[index] = { ...users[index], ...updates };
   localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
   return users[index];
@@ -134,7 +153,7 @@ export const updateUser = (id: string, updates: Partial<User>): User | null => {
 
 export const deleteUser = (id: string): boolean => {
   const users = getUsers();
-  const filtered = users.filter(u => u.id !== id);
+  const filtered = users.filter((u) => u.id !== id);
   if (filtered.length === users.length) return false;
   localStorage.setItem(DB_KEYS.USERS, JSON.stringify(filtered));
   return true;
@@ -149,7 +168,7 @@ export const getProduct = (): Product | null => {
 export const updateProduct = (updates: Partial<Product>): Product | null => {
   const product = getProduct();
   if (!product) return null;
-  
+
   const updated = { ...product, ...updates };
   localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(updated));
   return updated;
@@ -158,7 +177,7 @@ export const updateProduct = (updates: Partial<Product>): Product | null => {
 export const addStock = (amount: number): Product | null => {
   const product = getProduct();
   if (!product) return null;
-  
+
   const updated = { ...product, stock: product.stock + amount };
   localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(updated));
   return updated;
@@ -167,7 +186,7 @@ export const addStock = (amount: number): Product | null => {
 export const reduceStock = (amount: number): Product | null => {
   const product = getProduct();
   if (!product || product.stock < amount) return null;
-  
+
   const updated = { ...product, stock: product.stock - amount };
   localStorage.setItem(DB_KEYS.PRODUCT, JSON.stringify(updated));
   return updated;
@@ -181,7 +200,7 @@ export const getOrders = (): Order[] => {
 
 export const getOrdersByUser = (phone: string): Order[] => {
   const orders = getOrders();
-  return orders.filter(o => o.user_phone === phone);
+  return orders.filter((o) => o.user_phone === phone);
 };
 
 export const addOrder = (order: Omit<Order, 'id' | 'created_at'>): Order => {
@@ -198,9 +217,9 @@ export const addOrder = (order: Omit<Order, 'id' | 'created_at'>): Order => {
 
 export const updateOrderStatus = (id: string, status: OrderStatus): Order | null => {
   const orders = getOrders();
-  const index = orders.findIndex(o => o.id === id);
+  const index = orders.findIndex((o) => o.id === id);
   if (index === -1) return null;
-  
+
   orders[index] = { ...orders[index], status };
   localStorage.setItem(DB_KEYS.ORDERS, JSON.stringify(orders));
   return orders[index];
@@ -208,7 +227,7 @@ export const updateOrderStatus = (id: string, status: OrderStatus): Order | null
 
 export const deleteOrder = (id: string): boolean => {
   const orders = getOrders();
-  const filtered = orders.filter(o => o.id !== id);
+  const filtered = orders.filter((o) => o.id !== id);
   if (filtered.length === orders.length) return false;
   localStorage.setItem(DB_KEYS.ORDERS, JSON.stringify(filtered));
   return true;
@@ -236,12 +255,12 @@ export const logout = () => {
 export const getDashboardStats = () => {
   const product = getProduct();
   const orders = getOrders();
-  
+
   return {
     currentStock: product?.stock || 0,
     totalOrders: orders.length,
-    pendingOrders: orders.filter(o => o.status === 'pending').length,
-    acceptedOrders: orders.filter(o => o.status === 'accepted').length,
-    rejectedOrders: orders.filter(o => o.status === 'rejected').length,
+    pendingOrders: orders.filter((o) => o.status === 'pending').length,
+    acceptedOrders: orders.filter((o) => o.status === 'accepted').length,
+    rejectedOrders: orders.filter((o) => o.status === 'rejected').length,
   };
 };

@@ -5,14 +5,13 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Milk, Phone, Lock, ArrowRight, CheckCircle } from 'lucide-react';
+import { Milk, Phone, Lock, ArrowRight } from 'lucide-react';
 
 const Login: React.FC = () => {
   const { generateOTP, login } = useAuth();
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
-  const [generatedOTP, setGeneratedOTP] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +20,6 @@ const Login: React.FC = () => {
     setError('');
     setLoading(true);
 
-    // Validate phone number (10 digits)
     if (!/^\d{10}$/.test(phone)) {
       setError('Please enter a valid 10-digit phone number');
       setLoading(false);
@@ -32,7 +30,6 @@ const Login: React.FC = () => {
     setLoading(false);
 
     if (result.success) {
-      setGeneratedOTP(result.otp || null);
       setStep('otp');
     } else {
       setError(result.message);
@@ -61,14 +58,12 @@ const Login: React.FC = () => {
   const handleBack = () => {
     setStep('phone');
     setOtp('');
-    setGeneratedOTP(null);
     setError('');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-green-500 rounded-full mb-4 shadow-lg">
             <Milk className="w-10 h-10 text-white" />
@@ -83,8 +78,8 @@ const Login: React.FC = () => {
               {step === 'phone' ? 'Welcome Back' : 'Verify OTP'}
             </CardTitle>
             <CardDescription className="text-center">
-              {step === 'phone' 
-                ? 'Enter your phone number to continue' 
+              {step === 'phone'
+                ? 'Enter your phone number to continue'
                 : `Enter the 6-digit code sent to +91 ${phone}`}
             </CardDescription>
           </CardHeader>
@@ -112,8 +107,8 @@ const Login: React.FC = () => {
                     />
                   </div>
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full h-12 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-semibold"
                   disabled={loading}
                 >
@@ -123,16 +118,6 @@ const Login: React.FC = () => {
               </form>
             ) : (
               <form onSubmit={handleOTPSubmit} className="space-y-4">
-                {/* Demo OTP Display */}
-                {generatedOTP && (
-                  <Alert className="mb-4 bg-green-50 border-green-200">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
-                      Demo OTP: <strong>{generatedOTP}</strong>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                
                 <div className="space-y-2">
                   <Label htmlFor="otp">OTP Code</Label>
                   <div className="relative">
@@ -148,17 +133,17 @@ const Login: React.FC = () => {
                     />
                   </div>
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full h-12 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white font-semibold"
                   disabled={loading}
                 >
                   {loading ? 'Verifying...' : 'Verify & Login'}
                   {!loading && <ArrowRight className="ml-2 w-5 h-5" />}
                 </Button>
-                <Button 
-                  type="button" 
-                  variant="ghost" 
+                <Button
+                  type="button"
+                  variant="ghost"
                   className="w-full"
                   onClick={handleBack}
                 >
@@ -174,9 +159,8 @@ const Login: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Footer */}
         <div className="text-center mt-8 text-sm text-gray-500">
-          <p>© 2025 Kamadhenu Junnu. All rights reserved.</p>
+          <p>&copy; 2025 Kamadhenu Junnu. All rights reserved.</p>
         </div>
       </div>
     </div>
