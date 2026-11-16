@@ -9,8 +9,9 @@ import {
 } from '@/lib/db';
 
 interface AuthContextType extends AuthState {
-  login: (phone: string, otp: string) => Promise<{ success: boolean; message: string }>;
+  login: (phone: string, password: string) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
+  verifyPhone: (phone: string) => Promise<{ success: boolean; message: string }>;
   generateOTP: (phone: string) => Promise<{ success: boolean; message: string }>;
 }
 
@@ -30,35 +31,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     initializeDB();
   }, []);
 
-  const generateOTP = async (phone: string): Promise<{ success: boolean; message: string }> => {
+  const verifyPhone = async (phone: string): Promise<{ success: boolean; message: string }> => {
     const user = getUserByPhone(phone);
 
-    if (!user) {
-      return { success: false, message: 'Access not approved. Please contact admin.' };
+    if (!user || !user.is_active) {
+      return { success: false, message: 'Invalid mobile number.' };
     }
 
-    if (!user.is_active) {
-      return { success: false, message: 'Your account has been deactivated. Please contact admin.' };
-    }
-
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-    // For demo purposes, we'll log the OTP to the console.
-    console.log(`[DEMO] OTP for ${phone}: ${otp}`);
-    return { success: true, message: 'OTP sent successfully' };
+    return { success: true, message: 'Phone verified' };
   };
 
-  const login = async (phone: string, otp: string): Promise<{ success: boolean; message: string }> => {
-    // For demo purposes, we'll use a hardcoded OTP for now.
-    const hardcodedOTP = '123456';
+  // Maintained for backward compatibility
+  const generateOTP = async (phone: string): Promise<{ success: boolean; message: string }> => {
+    return verifyPhone(phone);
+  };
 
-    if (otp !== hardcodedOTP) {
-      return { success: false, message: 'Invalid OTP. Please try again.' };
+  const login = async (phone: string, password: string): Promise<{ success: boolean; message: string }> => {
+    const user = getUserByPhone(phone);
+    if (!user || !user.is_active) {
+      return { success: false, message: 'Invalid login credentials.' };
     }
 
-    const user = getUserByPhone(phone);
-    if (!user) {
-      return { success: false, message: 'User not found.' };
+    // Temporary credential verification rule:
+    // Reverse the final five digits of the registered mobile number
+    const lastFive = phone.slice(-5);
+    const expectedPassword = lastFive.split('').reverse().join('');
+
+    if (password !== expectedPassword) {
+      return { success: false, message: 'Invalid login credentials.' };
     }
 
     setCurrentUser(user);
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout, generateOTP }}>
+    <AuthContext.Provider value={{ ...state, login, logout, verifyPhone, generateOTP }}>
       {children}
     </AuthContext.Provider>
   );
