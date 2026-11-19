@@ -16,7 +16,7 @@ const Footer: React.FC<FooterProps> = ({ onLoginClick, isAuthenticated = false }
   };
 
   return (
-    <footer id="contact" className="kj-footer">
+    <footer className="kj-footer">
       <div className="kj-footer__inner">
         <div className="kj-footer__grid">
           {/* Brand column */}
@@ -42,7 +42,7 @@ const Footer: React.FC<FooterProps> = ({ onLoginClick, isAuthenticated = false }
 
           {/* Information & Access */}
           <div>
-            <div className="kj-footer__heading">Information</div>
+            <div className="kj-footer__heading">Information & Contact</div>
             {navLinks.slice(5).map((link) => (
               <a
                 key={link.href}
@@ -69,21 +69,42 @@ const Footer: React.FC<FooterProps> = ({ onLoginClick, isAuthenticated = false }
               {isAuthenticated ? 'Go to Dashboard' : 'Login / Order'}
             </button>
 
-            {/* Contact details — shown only when provided */}
-            {(footer.contact.email || footer.contact.phone) && (
-              <div style={{ marginTop: '16px' }}>
-                {footer.contact.email && (
-                  <p className="kj-footer__link" style={{ cursor: 'default' }}>
-                    {footer.contact.email}
-                  </p>
-                )}
-                {footer.contact.phone && (
-                  <p className="kj-footer__link" style={{ cursor: 'default' }}>
-                    {footer.contact.phone}
-                  </p>
-                )}
-              </div>
-            )}
+            {/* Proprietor Contact Details in Footer */}
+            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(245, 235, 215, 0.1)' }}>
+              <p
+                style={{
+                  fontSize: '0.8rem',
+                  color: 'var(--kj-gold)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
+                  marginBottom: '4px',
+                  fontWeight: 600,
+                }}
+              >
+                Proprietor
+              </p>
+              <p className="kj-footer__link" style={{ cursor: 'default', color: 'var(--kj-ivory)', fontWeight: 600 }}>
+                {footer.contact.proprietor}
+              </p>
+              <a
+                href={`tel:${footer.contact.rawPhone}`}
+                className="kj-footer__link"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                title="Call proprietor"
+              >
+                <span>📞 {footer.contact.phone}</span>
+              </a>
+              <a
+                href={`https://wa.me/91${footer.contact.rawPhone}?text=Hello%20Mahesh%20Pampa%20ji%2C%20I%20would%20like%20to%20inquire%20about%20Kamadhenu%20Junnu.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="kj-footer__link"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#25D366' }}
+                title="Chat on WhatsApp"
+              >
+                <span>💬 WhatsApp Chat</span>
+              </a>
+            </div>
           </div>
         </div>
 

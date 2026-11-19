@@ -213,16 +213,51 @@ export const callToAction = {
   secondaryCta: 'LOGIN / ORDER',
 } as const;
 
+// ──────────────────────────── Proprietor / Contact ────────────────────────────
+export const proprietor = {
+  sectionTag: 'DIRECT INQUIRIES & SUPPORT',
+  heading: 'PROPRIETOR & CONTACT INFORMATION',
+  supporting:
+    'For personal orders, bulk distribution, festive inquiries, or product information, connect directly with the proprietor of Kamadhenu Junnu.',
+  name: 'Mahesh Pampa',
+  title: 'Proprietor & Founder',
+  phone: '8310328856',
+  displayPhone: '+91 83103 28856',
+  callUrl: 'tel:8310328856',
+  whatsappUrl:
+    'https://wa.me/918310328856?text=Hello%20Mahesh%20Pampa%20ji%2C%20I%20would%20like%20to%20inquire%20about%20Kamadhenu%20Junnu.',
+  availability: 'Monday – Saturday: 9:00 AM – 7:00 PM IST',
+  location: 'Andhra Pradesh & Telangana, India',
+  features: [
+    {
+      title: 'Direct Personal Assistance',
+      description:
+        'Speak directly with the proprietor for order inquiries, customized packaging, or wholesale orders.',
+    },
+    {
+      title: 'Quick WhatsApp Response',
+      description:
+        'Send a message anytime for swift product details, preparation advice, and delivery schedules.',
+    },
+    {
+      title: 'Authentic Quality Assured',
+      description:
+        'Guaranteed genuine colostrum dairy heritage crafted with traditional hygiene and pure ingredients.',
+    },
+  ],
+} as const;
+
 // ──────────────────────────── Footer ────────────────────────────
 export const footer = {
   brand: brand.name,
   description:
     'Inspired by the richness of Indian dairy heritage and the timeless tradition of Junnu. Bringing a traditional South Indian favourite to your home.',
-  /* OWNER_CONFIRM: Add verified contact details below. */
   contact: {
-    email: '', // OWNER_CONFIRM
-    phone: '', // OWNER_CONFIRM
-    address: '', // OWNER_CONFIRM
+    proprietor: 'Mahesh Pampa',
+    phone: '+91 83103 28856',
+    rawPhone: '8310328856',
+    email: '',
+    address: 'Andhra Pradesh & Telangana, India',
   },
   copyright: `© ${new Date().getFullYear()} Kamadhenu Junnu. All rights reserved.`,
 } as const;

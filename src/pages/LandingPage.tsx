@@ -9,6 +9,7 @@ import ProductShowcase from '@/components/landing/ProductShowcase';
 import PreparationGuide from '@/components/landing/PreparationGuide';
 import QualitySection from '@/components/landing/QualitySection';
 import CallToAction from '@/components/landing/CallToAction';
+import ProprietorContact from '@/components/landing/ProprietorContact';
 import Footer from '@/components/landing/Footer';
 import '@/styles/landing.css';
 
@@ -64,6 +65,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
         onLoginClick={isAuthenticated && onDashboardClick ? onDashboardClick : onLoginClick}
         isAuthenticated={isAuthenticated}
       />
+      <ProprietorContact />
       <Footer
         onLoginClick={isAuthenticated && onDashboardClick ? onDashboardClick : onLoginClick}
         isAuthenticated={isAuthenticated}
